@@ -1,4 +1,4 @@
-# dr_als_parenting_tips_and_tools_flutter
+# Dr. Al's Parenting Tips & Tools (Flutter Edition)
 
 A new Flutter project.
 
