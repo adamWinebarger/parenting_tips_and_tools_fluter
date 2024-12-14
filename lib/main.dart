@@ -15,7 +15,13 @@ class MyApp extends StatelessWidget {
       title: 'Parenting Tips & Tools',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(surface: Colors.blueGrey)
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          onPrimary: Colors.white,
+        ).copyWith(surface: Colors.blueGrey),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.white)
+        )
       ),
       home: Scaffold(
         appBar: AppBar(
