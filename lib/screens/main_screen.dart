@@ -1,6 +1,7 @@
 
 
 import 'package:dr_als_parenting_tips_and_tools_flutter/screens/contacts_screen.dart';
+import 'package:dr_als_parenting_tips_and_tools_flutter/screens/list_screen.dart';
 import 'package:dr_als_parenting_tips_and_tools_flutter/widgets/image_button.dart';
 import 'package:dr_als_parenting_tips_and_tools_flutter/k.dart';
 import 'package:flutter/material.dart';
@@ -61,8 +62,25 @@ class _MainScreenState extends State<MainScreen> {
           MaterialPageRoute(builder: (context) => const ContactsScreen())
         );
         break;
-
-
+      case _NavigationScreens.GoodWebsites:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ListViewScreen(listViewSelection: ListViewSelection.goodWebsites)
+          )
+        );
+        break;
+      case _NavigationScreens.ADDTipSheets:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ListViewScreen(listViewSelection: ListViewSelection.adhdTipSheet)));
+        break;
+      case _NavigationScreens.ParentingTipSheets:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ListViewScreen(listViewSelection: ListViewSelection.tipSheet))
+        );
+        break;
       default:
         return;
     }
@@ -117,17 +135,17 @@ class _MainScreenState extends State<MainScreen> {
                 Expanded(child: ImageButton(
                   imagePath: adhdButtonPath,
                   label: "ADD/ADHD\nTip Sheets",
-                  onPressed: () {},
+                  onPressed: () => _go2NewScreen(_NavigationScreens.ADDTipSheets),
                 )),
                 Expanded(child: ImageButton(
                   imagePath: happyFolderButtonPath,
                   label: "Parenting\nTip Sheets",
-                  onPressed: () {},
+                  onPressed: () => _go2NewScreen(_NavigationScreens.ParentingTipSheets),
                 )),
                 Expanded(child: ImageButton(
                   imagePath: goodWebsitesButton,
                   label: "Good\nWebsites",
-                  onPressed: () {},
+                  onPressed: () => _go2NewScreen(_NavigationScreens.GoodWebsites),
                 ))
               ],
             )),
