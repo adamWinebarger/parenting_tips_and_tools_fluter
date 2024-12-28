@@ -5,6 +5,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PDFViewer extends StatefulWidget {
   const PDFViewer({super.key, required this.filePath});
@@ -24,6 +26,11 @@ class _PDFViewerState extends State<PDFViewer> {
   bool _pdfReady = false;
   int? _pages = 0;
   PDFViewController? _pdfViewController;
+
+  Future<void> _copyPDF2Temp() async {
+    final tempDir = await getTemporaryDirectory();
+    //final tempPath =
+  }
 
   @override
   Widget build(BuildContext context) {
