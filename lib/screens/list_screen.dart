@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dr_als_parenting_tips_and_tools_flutter/screens/pdf_viewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
