@@ -2,6 +2,7 @@
 
 import 'package:dr_als_parenting_tips_and_tools_flutter/screens/contacts_screen.dart';
 import 'package:dr_als_parenting_tips_and_tools_flutter/screens/list_screen.dart';
+import 'package:dr_als_parenting_tips_and_tools_flutter/screens/location_screen.dart';
 import 'package:dr_als_parenting_tips_and_tools_flutter/widgets/image_button.dart';
 import 'package:dr_als_parenting_tips_and_tools_flutter/k.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +28,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
 
-  void _launchURL() async {
-    final docalURL = Uri.parse("https://www.attentiondoc.com");
+  void _launchURL(String url) async {
+    final docalURL = Uri.parse(url);
 
     if (await canLaunchUrl(docalURL)) {
       //print("MAde it to here");
-      await launchUrl(docalURL);
+      await launchUrl(docalURL, mode: LaunchMode.externalApplication);
     } else {
       if (!context.mounted) return;
       showDialog(
@@ -81,6 +82,16 @@ class _MainScreenState extends State<MainScreen> {
           MaterialPageRoute(builder: (context) => const ListViewScreen(listViewSelection: ListViewSelection.tipSheet))
         );
         break;
+      case _NavigationScreens.Contacts:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ContactsScreen())
+        );
+      case _NavigationScreens.Location:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LocationScreen())
+        );
       default:
         return;
     }
@@ -115,7 +126,7 @@ class _MainScreenState extends State<MainScreen> {
                 Expanded(child: ImageButton(
                     imagePath: websitesButtonPath,
                     label: "Dr. Al's\nWebsite",
-                    onPressed: _launchURL
+                    onPressed: () => _launchURL("https://www.attentiondoc.com")
                 )),
                 Expanded(child: ImageButton(
                   imagePath: contactButtonPath,
@@ -125,7 +136,7 @@ class _MainScreenState extends State<MainScreen> {
                 Expanded(child: ImageButton(
                     imagePath: locationButtonPath,
                     label: "Location\n",
-                    onPressed: () {}
+                    onPressed: () => _go2NewScreen(_NavigationScreens.Location)
                 ))
               ],
             )),
@@ -155,9 +166,8 @@ class _MainScreenState extends State<MainScreen> {
                 Expanded( child: ImageButton(
                   imagePath: videoButtonPath,
                   label: "Videos",
-                  onPressed: () {},
+                  onPressed: () => _launchURL("https://www.youtube.com/@Dr.AlWinebarger/videos"),
                 )),
-
               ],
             ))
 
