@@ -142,32 +142,49 @@ class _ListViewScreenState extends State<ListViewScreen> {
         title: Text(widget.listViewSelection == ListViewSelection.tipSheet ? "Tip Sheets" : widget.listViewSelection == ListViewSelection.adhdTipSheet ? "ADD/ADHD Tips" : "Good Websites"),
         backgroundColor: Colors.blueGrey,
       ),
-      body: ListView.separated(
-        itemCount: _selectedList.length,
-        itemBuilder: (context, index) {
-          final item = _selectedList[index];
-          return Padding(padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            child: ListTile(
-              title: Text(
-                item.labelText,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
-                softWrap: true,
-                maxLines: 3,
-              ),
-              leading: Image.asset(item.imagePath),
-              onTap: () {
-                item.selectionFunction();
-              },
-            ),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return Divider(
-            color: Colors.grey,
-            thickness: 1,
-            height: 1,
-          );
-        },
+      body: Padding(
+        padding: EdgeInsets.only(left: 15, right: 15, top: 25, bottom: 0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color(0xFF484747), //may come back and make this a secondary color in theme data
+            border: Border.all(color: Colors.blueGrey, width: 2),
+            borderRadius: BorderRadius.circular(10)
+          ),
+          child: ListView.separated(
+            itemCount: _selectedList.length,
+            itemBuilder: (context, index) {
+              final item = _selectedList[index];
+              return Container(
+                decoration: BoxDecoration(
+                    border:Border(
+                        bottom: BorderSide(color: Colors.blueGrey, width: 2),
+                    ),
+                ),
+                child: Padding(padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  child: ListTile(
+                    title: Text(
+                      item.labelText,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                      softWrap: true,
+                      maxLines: 3,
+                    ),
+                    leading: Image.asset(item.imagePath),
+                    onTap: () {
+                      item.selectionFunction();
+                    },
+                  ),
+                )
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider(
+                color: Colors.grey,
+                thickness: 1,
+                height: 1,
+              );
+            },
+          ),
+        ),
       )
     );
   }

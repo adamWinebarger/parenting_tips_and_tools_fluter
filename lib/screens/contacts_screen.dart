@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ContactsScreen extends StatelessWidget {
+class ContactsScreen extends StatefulWidget {
   const ContactsScreen({super.key});
 
+  @override
+  State<StatefulWidget> createState() => _ContactsScreenState();
+
+}
+
+class _ContactsScreenState extends State<ContactsScreen> {
+
   final _navAddress = "509 Franklin Ave,\nGrand Haven, MI 49456";
-  final _phoneNumber = "(616) 844-4140";
-  final _website = "www.attentiondoc.com";
+  final _phoneNumber = "tel:6168444140";
+  final _website = "https://www.attentiondoc.com";
 
   void _openNavigationApp() async {
     final Uri googleMapsUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=$_navAddress");
@@ -35,7 +42,7 @@ class ContactsScreen extends StatelessWidget {
     final websiteURL = Uri.parse(_website);
 
     if (await canLaunchUrl(websiteURL)) {
-      await launchUrl(websiteURL);
+      await launchUrl(websiteURL, mode: LaunchMode.externalApplication);
     } else {
       throw "Could not access website";
     }
@@ -51,95 +58,106 @@ class ContactsScreen extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 30, right: 30, top: 75, bottom: 15),
-        child: Center(
-          child: Column(
-            children: [
-              const Text(
-                "Contact Information",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              Text("Dr. Al Winebarger, Ph.D.\n\n"),
-              //Alright. So I think the way to do this is to have a row with 2
-              //columns in it so we can run things down on each side without them affecting eachother
-              SizedBox(height: 25,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Left side Column
-                  Expanded(child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text("Address:"),
-                      InkWell(
-                        onTap: _openNavigationApp,
-                        child: Text(
-                          _navAddress,
-                          style: const TextStyle(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            decorationColor: Colors.blue
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 50,),
-                      Text("Phone"),
-                      InkWell(
-                        onTap: _makePhoneCall,
-                        child: Text(
-                          _phoneNumber,
-                          style: const TextStyle(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            decorationColor: Colors.blue
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 50,),
-                      Text("Website:"),
-                      InkWell(
-                        onTap: _go2Website,
-                        child: Text(
-                          _website,
-                          style: TextStyle(
-                            color: Colors.blue,
-                            decorationColor: Colors.blue,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      )
-                    ],
-                  )),
-                  SizedBox(width: 25,),
-                  //Right side column
-                  const Expanded(child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text("Hours:\n"),
-                      Text("Mon:\n9:00am-9:00pm\n"),
-                      Text("Tues:\n9:00am-9:00pm\n"),
-                      Text("Wed:\n9:00am-9:00pm\n"),
-                      Text("Thurs:\n9:00am-9:00pm\n"),
-                      Text("Fri:\n9:00am-9:00pm\n"),
-                      Text("Sat:\nclosed\n"),
-                      Text("Sun:\nclosed\n")
-                    ],
-                  ))
-                ],
-              )
-            ],
+        padding: EdgeInsets.only(left: 15, right: 15, top: 75, bottom: 30),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Color(0xFF484747), //may come back and make this a secondary color in theme data
+              border: Border.all(color: Colors.blueGrey, width: 2),
+              borderRadius: BorderRadius.circular(10)
           ),
-        ),
+          child: Padding(
+            padding: EdgeInsets.all(15),
+            child: Center(
+              child: Column(
+                children: [
+                  const Text(
+                    "Contact Information",
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  const Text("Dr. Al Winebarger, Ph.D.\n\n"),
+                  //Alright. So I think the way to do this is to have a row with 2
+                  //columns in it so we can run things down on each side without them affecting eachother
+                  const SizedBox(height: 25,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //Left side Column
+                      Expanded(child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text("Address:"),
+                          InkWell(
+                            onTap: _openNavigationApp,
+                            child: Text(
+                              _navAddress,
+                              style: const TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  decorationColor: Colors.blue
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 50,),
+                          const Text("Phone"),
+                          InkWell(
+                            onTap: _makePhoneCall,
+                            child: const Text(
+                              "(616) 844-4140",
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  decorationColor: Colors.blue
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 50,),
+                          const Text("Website:"),
+                          InkWell(
+                            onTap: () => _go2Website()
+                            ,
+                            child: const Text(
+                              "www.attentiondoc.com",
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decorationColor: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                      SizedBox(width: 25,),
+                      //Right side column
+                      const Expanded(child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Hours:\n"),
+                          Text("Mon:\n9:00am-9:00pm\n"),
+                          Text("Tues:\n9:00am-9:00pm\n"),
+                          Text("Wed:\n9:00am-9:00pm\n"),
+                          Text("Thurs:\n9:00am-9:00pm\n"),
+                          Text("Fri:\n9:00am-9:00pm\n"),
+                          Text("Sat:\nclosed\n"),
+                          Text("Sun:\nclosed\n")
+                        ],
+                      ))
+                    ],
+                  )
+                ],
+              ),
+            ),
+          )
+        )
       ),
     );
   }

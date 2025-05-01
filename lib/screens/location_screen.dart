@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,7 +13,10 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   //LocationScreen({super.key});
 
-  final _officeCoords = const LatLng(43.0617955, -86.228449);
+  //final _officeCoords = const LatLng(43.0617955, -86.228449);
+  final _officeCoords = Position(-86.225885, 43.0618141);
+  final ACCESS_TOKEN = "pk.eyJ1IjoiYWRhbS13aW5lYjkiLCJhIjoiY202NDNwcTQ2MTcyejJrb2hmY2NubW15ZCJ9.fKrwXx72mgGJ7MRNBDUejw";
+
 
   bool _hasNavigationPermission = false;
 
@@ -22,16 +26,25 @@ class _LocationScreenState extends State<LocationScreen> {
       setState(() {
         _hasNavigationPermission = true;
       });
+    } else {
+      await _requestPermission();
     }
   }
 
   Future<void> _requestPermission() async {
     final status = await Permission.location.request();
+
     if (status.isGranted) {
       setState(() {
         _hasNavigationPermission = true;
       });
+    } else {
+      setState(() {
+        _hasNavigationPermission = false;
+      });
     }
+
+    print(status);
 
     if (status.isPermanentlyDenied) {
       openAppSettings();
@@ -39,8 +52,9 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void _openNavigationApp() async {
+
     final googleMapsURL = Uri.parse(
-        'https://www.google.com/maps/dir/?api=1&destination=${_officeCoords.latitude},${_officeCoords.longitude}');
+        'https://www.google.com/maps/dir/?api=1&destination=509+franklin+ave+grand+haven+mi+49417');
 
     if (await canLaunchUrl(googleMapsURL)) {
       await launchUrl(googleMapsURL);
@@ -53,7 +67,11 @@ class _LocationScreenState extends State<LocationScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _checkNavigationPermissions();
+    WidgetsFlutterBinding.ensureInitialized();
+    MapboxOptions.setAccessToken(ACCESS_TOKEN);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _checkNavigationPermissions();
+    // });
   }
 
   @override
@@ -78,12 +96,12 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
               const SizedBox(height: 25,),
               //_hasNavigationPermission ? _googleMapsWidget() : _buildErrorWidget(),
-              _googleMapsWidget(),
+              _mapWidget(),
               SizedBox(height: 10),
               TextButton(
                 onPressed: _openNavigationApp,
                 child: const Text(
-                  "509 Franklin Ave.,\nGrand Haven, MI, 49456",
+                  "509 Franklin Ave, Grand Haven, MI, 49456 (tap here to open in navigator)",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white
@@ -110,32 +128,38 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 
-  Widget _googleMapsWidget() {
+  Widget _mapWidget() {
     return Expanded(
-      child: GestureDetector(
-        onDoubleTap: _openNavigationApp,
-        child: GoogleMap(
-          initialCameraPosition: CameraPosition(
-              target: _officeCoords,
-              zoom: 16.0
-          ),
-          markers: {
-            Marker(
-                markerId: MarkerId("Dr. Al's Office"),
-                position: _officeCoords,
-                infoWindow: InfoWindow(title: "Dr. Al's Office")
-            ),
-          },
-          myLocationButtonEnabled: false,
-          myLocationEnabled: false,
-          zoomControlsEnabled: false, //might come back and change this one
-          scrollGesturesEnabled: false,
-          tiltGesturesEnabled: false,
-          rotateGesturesEnabled: false,
-          zoomGesturesEnabled: false,
-        ),
-      )
+        child: GestureDetector(
+          //onDoubleTap: _openNavigationApp,
+          onLongPress: _openNavigationApp,
 
+          child: MapWidget(
+            cameraOptions: CameraOptions(
+              center: Point(coordinates: _officeCoords),
+              zoom: 13,
+              bearing: 0,
+              pitch: 0
+            ),
+            onMapCreated: (MapboxMap mapboxMap) async {
+              //Create our point annotation manager
+              PointAnnotationManager? pointAnnotationManager =
+                await mapboxMap.annotations.createPointAnnotationManager();
+
+              final bytes = await rootBundle.load('assets/images/pin_drop_location.png');
+              final imageData = bytes.buffer.asUint8List();
+
+              //Add a point annotation (marker)
+              pointAnnotationManager.create(PointAnnotationOptions(
+                geometry: Point(coordinates: _officeCoords),
+                iconSize: 0.25,
+                //iconImage: "marker-15"
+                image: imageData
+              ));
+
+            },
+          )
+        )
     );
   }
 
