@@ -1,4 +1,4 @@
-import 'package:dr_als_parenting_tips_and_tools_flutter/screens/pdf_viewer.dart';
+import 'package:dr_als_parenting_tips_and_tools_flutter/screens/pdf_viewer2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -76,7 +76,7 @@ class _ListViewScreenState extends State<ListViewScreen> {
           list.add(_ListItem(() {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PDFViewer(filePath: dir + pdfMap[title]!)));
+                MaterialPageRoute(builder: (context) => PDFViewer2(filePath: dir + pdfMap[title]!)));
           }, title, 'assets/images/pdficon.png'));
         }
         break;
@@ -87,6 +87,7 @@ class _ListViewScreenState extends State<ListViewScreen> {
           "ADHD Assessment Components Brief" : "ADHDassessment.pdf",
           "The Keys to Healthy Discipline" : "Keys2HealthyDiscipline.pdf",
           "21 Ways to Help Kids With ADD/ADHD" : "21WaysToHelpKidsWithADD.pdf",
+          //"Treatment for ADHD - Where to go from here?" : "treatment4ADHD.pdf",
           "Barriers to Discipline" : "Barriers2Discipline.pdf",
           "Stress Management for Parents" : "StressManagement4Parents.pdf",
           "Making Clear Requests - 8 Steps to Slowing Kids Down" : "MakingClearRequests.pdf",
@@ -101,7 +102,7 @@ class _ListViewScreenState extends State<ListViewScreen> {
           list.add(_ListItem(() {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PDFViewer(filePath: dir + pdfMap[title]!)));
+                MaterialPageRoute(builder: (context) => PDFViewer2(filePath: dir + pdfMap[title]!)));
           }, title, 'assets/images/pdficon.png'));
         }
         break;
